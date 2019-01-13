@@ -24,7 +24,7 @@
 #define DBNAME "information_schema"
 #define GROUT_NAME "sqladvisor"
 #define SEP ';'
-#define EXPLAIN_ROWS 8
+#define EXPLAIN_ROWS 8  //Explain结果集中rows列所处的offset，因为在不同的数据库版本中不太一样，所以应该动态获取,这个宏被废弃。
 #define INDEX_NON_UNIQUE 1
 #define INDEX_KEY_NAME 2
 #define INDEX_SEQ 3
@@ -314,12 +314,22 @@ uint get_join_table_result_set(TABLE_LIST *table) {
         finish_with_error(con);
     }
 
-    int num_fields = mysql_num_fields(result);
+    //int num_fields = mysql_num_fields(result);
+    unsigned int fields_offset =0;
+    MYSQL_FIELD* field;
+    while((field=mysql_fetch_field(result)) != NULL)
+    {
+        if(strcasecmp(field->name,"rows") == 0)
+        {
+            break;
+        }
+        fields_offset++;
+    }
 
     MYSQL_ROW row;
 
     if ((row = mysql_fetch_row(result))) {
-        result_set_count = atoi(row[EXPLAIN_ROWS]);
+        result_set_count = atoi(row[fields_offset]);
     }
     g_string_free(cardinality_sql, TRUE);
     mysql_free_result(result);
