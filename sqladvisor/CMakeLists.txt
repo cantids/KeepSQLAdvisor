@@ -9,6 +9,8 @@ include_directories("/usr/local/sqlparser/include/regex")
 # 或者其它操作系统需要酌情修改，再进行cmake操作
 include_directories("/usr/lib64/glib-2.0/include")
 include_directories("/usr/local/include/glib-2.0")
+# ubuntu glib2 include dir
+include_directories("/usr/include/glib-2.0")
 
 # 忽略，此为开发者Debug时的link目录。
 link_directories("/data/JDB/SQLAdvisor/cmake-build-debug/sql")
