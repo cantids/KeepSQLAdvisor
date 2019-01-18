@@ -519,7 +519,7 @@ int mysql_sql_parse_field_cardinality_new(Item_field *field,
     char *dbname, *tablename;
     TABLE_LIST * table = find_table(field);
     if (table) {
-	tablename = table->table_name;
+	      tablename = table->table_name;
         dbname = table->db;
     } else
         return 0;
@@ -1153,6 +1153,10 @@ bool is_not_tmp_table(TABLE_LIST * table){
 	return true;
 }
 
+/**
+ * 解析where子句
+ * @param item_where
+ */
 void mysql_sql_parse(Item *item_where) {
     const Item::Type item_where_type = item_where->type();
     switch (item_where_type) {
@@ -1361,7 +1365,7 @@ int main(int argc, char **argv) {
     lc = setlocale(LC_ALL, "");
     if (NULL == lc) {
         sql_print_error("setlocale 有错 \n");
-        if(sqlparse_path) free(sqlparse_path);
+        //if(sqlparse_path) free(sqlparse_path); 不需要吧，上面已经执行过了
         return -1;
     }
 
